@@ -24,7 +24,7 @@ OBJCOPY = $(TOOLDIR)/arm-none-eabi-objcopy
 CFLAGS = $(COMPILE_OPTS) $(TARGET_ARCH)
 CXXFLAGS = $(COMPILE_OPTS) $(TARGET_ARCH)
 ASFLAGS = -x assembler-with-cpp -c $(TARGET_ARCH) $(COMPILE_OPTS)
-LDFLAGS = -Wl,--gc-sections,-Map=bin/main.map,-cref -T stm32_flash.ld $(INCLUDE_DIRS) -mcpu=cortex-m4 -march=armv7e-m -mthumb -lm -lstdc++ -L $(TOOLDIR)../arm-none-eabi/lib/thumb -L $(SPLDIR)/Libraries -nostartfiles --specs=nosys.specs -u _printf_float -Wl,--start-group -lgcc -lc -lm -lrdimon -Wl,--end-group
+LDFLAGS = -Wl,-lgcc,-lc,-lm,-lrdimon,--gc-sections,-Map=bin/main.map,-cref -T stm32_flash.ld $(INCLUDE_DIRS) -lm -lstdc++ -L $(TOOLDIR)/../arm-none-eabi/lib/thumb -L $(SPLDIR)/Libraries -nostartfiles --specs=nano.specs --specs=rdimon.specs -u _printf_float $(TARGET_ARCH)
 
 .PHONY: all
 all: libstm32f401xx startup bin/main.bin
