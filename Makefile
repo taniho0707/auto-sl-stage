@@ -51,7 +51,10 @@ $(LIB_OBJS): \
 clean:
 	rm -rf *.o *.s bin/* *\~
 
+.PHONY: debug
 debug:
+	python write_main.py
+	gtkterm
 
 .PHONY: flash
 flash:
