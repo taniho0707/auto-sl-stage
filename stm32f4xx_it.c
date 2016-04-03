@@ -147,9 +147,11 @@ void PendSV_Handler(void)
   * @param  None
   * @retval None
   */
-void SysTick_Handler(void)
-{
-  TimingDelay_Decrement();
+void SysTick_Handler(void){
+	TimingDelay_Decrement();
+
+	static Solenoid* solenoid = Solenoid::getInstance();
+	solenoid->interrupt();
 }
 
 /******************************************************************************/
@@ -167,6 +169,8 @@ void SysTick_Handler(void)
 /*void PPP_IRQHandler(void)
 {
 }*/
+
+
 
 /**
   * @}

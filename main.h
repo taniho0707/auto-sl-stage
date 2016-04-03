@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+#include "Servo.h"
+#include "Solenoid.h"
 
 void TimingDelay_Decrement(void);
 
