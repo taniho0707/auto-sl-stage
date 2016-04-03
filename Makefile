@@ -35,7 +35,7 @@ bin/main.bin: $(patsubst %.c,%.o,$(wildcard *.c)) $(patsubst %.cpp,%.o,$(wildcar
 	etags *.[ch]
 
 LIB_OBJS = $(sort \
- $(patsubst %.c,%.o,$(wildcard ../STM32F4xx_DSP_StdPeriph_Lib/Libraries/STM32F4xx_StdPeriph_Driver/src/*.c)))
+ $(patsubst %.c,%.o,$(wildcard $(SPLDIR)/Libraries/STM32F4xx_StdPeriph_Driver/src/*.c)))
 
 libstm32f401xx: $(LIB_OBJS)
 	$(AR) cr $(SPLDIR)/Libraries/libstm32f401xx.a $(LIB_OBJS)
