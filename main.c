@@ -137,6 +137,137 @@ void setServo(int16_t angle, uint8_t tim){
 	}
 }
 
+void setE(){
+	GPIO_SetBits(GPIOA, GPIO_Pin_6);
+}
+void resetE(){
+	GPIO_ResetBits(GPIOA, GPIO_Pin_6);
+}
+void setRS(){
+	GPIO_SetBits(GPIOA, GPIO_Pin_5);
+}
+void resetRS(){
+	GPIO_ResetBits(GPIOA, GPIO_Pin_5);
+}
+void setLcdBit(uint8_t pin){
+	if(pin == 0)
+		GPIO_SetBits(GPIOB, GPIO_Pin_6);
+	else if(pin == 1)
+		GPIO_SetBits(GPIOC, GPIO_Pin_7);
+	else if(pin == 2)
+		GPIO_SetBits(GPIOA, GPIO_Pin_7);
+	else if(pin == 3)
+		GPIO_SetBits(GPIOA, GPIO_Pin_8);
+	else if(pin == 4)
+		GPIO_SetBits(GPIOB, GPIO_Pin_10);
+	else if(pin == 5)
+		GPIO_SetBits(GPIOB, GPIO_Pin_4);
+	else if(pin == 6)
+		GPIO_SetBits(GPIOB, GPIO_Pin_5);
+	else if(pin == 7)
+		GPIO_SetBits(GPIOB, GPIO_Pin_3);
+}
+void resetLcdBit(uint8_t pin){
+	if(pin == 0)
+		GPIO_ResetBits(GPIOB, GPIO_Pin_6);
+	else if(pin == 1)
+		GPIO_ResetBits(GPIOC, GPIO_Pin_7);
+	else if(pin == 2)
+		GPIO_ResetBits(GPIOA, GPIO_Pin_7);
+	else if(pin == 3)
+		GPIO_ResetBits(GPIOA, GPIO_Pin_8);
+	else if(pin == 4)
+		GPIO_ResetBits(GPIOB, GPIO_Pin_10);
+	else if(pin == 5)
+		GPIO_ResetBits(GPIOB, GPIO_Pin_4);
+	else if(pin == 6)
+		GPIO_ResetBits(GPIOB, GPIO_Pin_5);
+	else if(pin == 7)
+		GPIO_ResetBits(GPIOB, GPIO_Pin_3);
+}
+void setLcdBits(uint8_t data){
+	for(uint8_t i=0; i<8; ++i){
+		if((data & (0x1<<i)) == 0)
+			resetLcdBit(i);
+		else
+			setLcdBit(i);
+	}
+}
+void initLCD(){
+	GPIO_InitTypeDef GPIO_InitStructure;
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_10;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;
+	GPIO_Init(GPIOC, &GPIO_InitStructure);
+
+	resetRS();
+	setE();
+	setLcdBits(0x3C);
+	Delay(1);
+	resetE();
+	Delay(1);
+	
+	resetRS();
+	setE();
+	setLcdBits(0x3C);
+	Delay(1);
+	resetE();
+	Delay(1);
+
+	resetRS();
+	setE();
+	setLcdBits(0x06);
+	Delay(1);
+	resetE();
+	Delay(1);
+
+	resetRS();
+	setE();
+	setLcdBits(0x01);
+	Delay(1);
+	resetE();
+	Delay(3);
+
+	resetRS();
+	setE();
+	setLcdBits(0x07);
+	Delay(1);
+	resetE();
+	Delay(1);
+}
+void clearLcd(){
+	resetRS();
+	setE();
+	setLcdBits(0x01);
+	Delay(1);
+	resetE();
+	Delay(3);
+
+	resetRS();
+	setE();
+	setLcdBits(0x02);
+	Delay(1);
+	resetE();
+	Delay(2);
+}
+void printChar(uint8_t c){
+	setRS();
+	setE();
+	setLcdBits(c);
+	Delay(1);
+	resetE();
+	Delay(1);
+}
+
 
 int main(void){
 	SystemInit();
@@ -168,6 +299,29 @@ int main(void){
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
 	GPIO_ResetBits(GPIOA, GPIO_Pin_11 | GPIO_Pin_12);
+
+	Delay(500);
+	initLCD();
+	Delay(500);
+//	clearLcd();
+	printChar('H');
+	printChar('e');
+	printChar('l');
+	printChar('l');
+	printChar('o');
+
+	GPIO_SetBits(GPIOB, GPIO_Pin_12);
+	Delay(50);
+	GPIO_ResetBits(GPIOB, GPIO_Pin_12);
+	Delay(20);
+	GPIO_SetBits(GPIOB, GPIO_Pin_12);
+	Delay(50);
+	GPIO_ResetBits(GPIOB, GPIO_Pin_12);
+	Delay(20);
+	GPIO_SetBits(GPIOB, GPIO_Pin_12);
+	Delay(50);
+	GPIO_ResetBits(GPIOB, GPIO_Pin_12);
+	Delay(20);
 
 	initServo();
 	startServo(2);
