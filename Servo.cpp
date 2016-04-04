@@ -57,6 +57,10 @@ Servo::Servo(){
 	TIM_ITConfig(TIM3, TIM_IT_Update, ENABLE);
 	TIM_ARRPreloadConfig(TIM3, ENABLE);
 	TIM_CtrlPWMOutputs(TIM3, ENABLE);
+
+	for(auto i=0; i<2; ++i)
+		for(auto j=0; j<5; ++j)
+			defaultpos[i][j] = 0;
 }
 
 void Servo::enable(ServoSide side){
@@ -108,6 +112,16 @@ void Servo::setAngle(int16_t angle, ServoSide side){
 		TIM_OC4PreloadConfig(TIM5,TIM_OCPreload_Enable);
 	}
 }
+
+void Servo::setLineDefault(
+	md::noteline line, int16_t angle, ServoSide side){
+	defaultpos[static_cast<uint16_t>(side)][static_cast<uint16_t>(line)] = angle;
+}
+
+void Servo::goLine(md::noteline line, ServoSide side){
+	setAngle(defaultpos[static_cast<uint16_t>(side)][static_cast<uint16_t>(line)], side);
+}
+
 
 Servo* Servo::getInstance(){
 	static Servo instance;
