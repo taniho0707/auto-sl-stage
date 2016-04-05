@@ -8,5 +8,7 @@
 #include "Servo.h"
 #include "Solenoid.h"
 
+#include "ComPc.h"
+
 void TimingDelay_Decrement(void);
 
