@@ -27,18 +27,18 @@ Servo::Servo(){
 	TIM_initstr.TIM_RepetitionCounter = 0;
 	TIM_TimeBaseInit(TIM2, &TIM_initstr);
 	TIM_TimeBaseInit(TIM3, &TIM_initstr);
-	TIM_TimeBaseInit(TIM5, &TIM_initstr);
+	TIM_TimeBaseInit(TIM9, &TIM_initstr);
 
 	TIM_OC_initstr.TIM_OCMode = TIM_OCMode_PWM1;
 	TIM_OC_initstr.TIM_OCPolarity = TIM_OCPolarity_High;
 	TIM_OC_initstr.TIM_OutputState = TIM_OutputState_Enable;
 	TIM_OC_initstr.TIM_Pulse = 4500-1;
 	TIM_OC3Init(TIM2,&TIM_OC_initstr);
-	TIM_OC3PreloadConfig(TIM2,TIM_OCPreload_Disable);
+	TIM_OC3PreloadConfig(TIM2,TIM_OCPreload_Enable);
 	TIM_OC4Init(TIM3,&TIM_OC_initstr);
-	TIM_OC4PreloadConfig(TIM3,TIM_OCPreload_Disable);
+	TIM_OC4PreloadConfig(TIM3,TIM_OCPreload_Enable);
 	TIM_OC4Init(TIM5,&TIM_OC_initstr);
-	TIM_OC4PreloadConfig(TIM5,TIM_OCPreload_Disable);
+	TIM_OC4PreloadConfig(TIM5,TIM_OCPreload_Enable);
 
 	GPIO_PinAFConfig(GPIOA, GPIO_PinSource2, GPIO_AF_TIM2);
 	TIM_TimeBaseInit(TIM2, &TIM_initstr);
@@ -52,11 +52,11 @@ Servo::Servo(){
 	TIM_ARRPreloadConfig(TIM3, ENABLE);
 	TIM_CtrlPWMOutputs(TIM3, ENABLE);
 
-	GPIO_PinAFConfig(GPIOA, GPIO_PinSource3, GPIO_AF_TIM3);
-	TIM_TimeBaseInit(TIM3, &TIM_initstr);
-	TIM_ITConfig(TIM3, TIM_IT_Update, ENABLE);
-	TIM_ARRPreloadConfig(TIM3, ENABLE);
-	TIM_CtrlPWMOutputs(TIM3, ENABLE);
+	GPIO_PinAFConfig(GPIOA, GPIO_PinSource3, GPIO_AF_TIM5);
+	TIM_TimeBaseInit(TIM5, &TIM_initstr);
+	TIM_ITConfig(TIM5, TIM_IT_Update, ENABLE);
+	TIM_ARRPreloadConfig(TIM5, ENABLE);
+	TIM_CtrlPWMOutputs(TIM5, ENABLE);
 
 	for(auto i=0; i<2; ++i)
 		for(auto j=0; j<5; ++j)
@@ -66,9 +66,9 @@ Servo::Servo(){
 void Servo::enable(ServoSide side){
 	if(side == ServoSide::LEFT){
 		TIM_Cmd(TIM2, ENABLE);
-	} else if(side == ServoSide::FRONT){
-		TIM_Cmd(TIM3, ENABLE);
 	} else if(side == ServoSide::RIGHT){
+		TIM_Cmd(TIM3, ENABLE);
+	} else if(side == ServoSide::FRONT){
 		TIM_Cmd(TIM5, ENABLE);
 	}
 }
@@ -76,38 +76,27 @@ void Servo::enable(ServoSide side){
 void Servo::disable(ServoSide side){
 	if(side == ServoSide::LEFT){
 		TIM_Cmd(TIM2, DISABLE);
-	} else if(side == ServoSide::FRONT){
-		TIM_Cmd(TIM3, DISABLE);
 	} else if(side == ServoSide::RIGHT){
+		TIM_Cmd(TIM3, DISABLE);
+	} else if(side == ServoSide::FRONT){
 		TIM_Cmd(TIM5, DISABLE);
 	}
 }
 
 void Servo::setAngle(int16_t angle, ServoSide side){
-	TIM_TimeBaseInitTypeDef TIM_initstr;
 	TIM_OCInitTypeDef TIM_OC_initstr;
-	
-	TIM_initstr.TIM_Period = 60000 - 1;
-	TIM_initstr.TIM_Prescaler = 32 - 1;
-	TIM_initstr.TIM_ClockDivision = 0;
-	TIM_initstr.TIM_CounterMode = TIM_CounterMode_Up;
-	TIM_initstr.TIM_RepetitionCounter = 0;
-	
 	TIM_OC_initstr.TIM_OCMode = TIM_OCMode_PWM1;
 	TIM_OC_initstr.TIM_OCPolarity = TIM_OCPolarity_High;
 	TIM_OC_initstr.TIM_OutputState = TIM_OutputState_Enable;
 	TIM_OC_initstr.TIM_Pulse = (4500 + 12 * angle) - 1;
 
 	if(side == ServoSide::LEFT){
-		TIM_TimeBaseInit(TIM2, &TIM_initstr);
 		TIM_OC3Init(TIM2,&TIM_OC_initstr);
 		TIM_OC3PreloadConfig(TIM2,TIM_OCPreload_Enable);
-	} else if(side == ServoSide::FRONT){
-		TIM_TimeBaseInit(TIM3, &TIM_initstr);
+	} else if(side == ServoSide::RIGHT){
 		TIM_OC4Init(TIM3,&TIM_OC_initstr);
 		TIM_OC4PreloadConfig(TIM3,TIM_OCPreload_Enable);
-	} else if(side == ServoSide::RIGHT){
-		TIM_TimeBaseInit(TIM5, &TIM_initstr);
+	} else if(side == ServoSide::FRONT){
 		TIM_OC4Init(TIM5,&TIM_OC_initstr);
 		TIM_OC4PreloadConfig(TIM5,TIM_OCPreload_Enable);
 	}

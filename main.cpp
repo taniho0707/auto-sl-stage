@@ -187,13 +187,21 @@ int main(void){
 
 	Servo* srv = Servo::getInstance();
 	srv->enable(ServoSide::LEFT);
+	srv->enable(ServoSide::RIGHT);
 	GPIO_SetBits(GPIOB, GPIO_Pin_13);
 	GPIO_ResetBits(GPIOB, GPIO_Pin_14 | GPIO_Pin_15);
-	srv->setLineDefault(md::noteline::LEFT, -15, ServoSide::LEFT);
-	srv->setLineDefault(md::noteline::LEFTMIDDLE, 5, ServoSide::LEFT);
+	srv->setAngle(-40, ServoSide::LEFT);
+	srv->setAngle(45, ServoSide::RIGHT);
+	srv->setLineDefault(md::noteline::LEFT, -5, ServoSide::LEFT);
+	srv->setLineDefault(md::noteline::LEFTMIDDLE, 25, ServoSide::LEFT);
 	srv->setLineDefault(md::noteline::MIDDLE, 40, ServoSide::LEFT);
-	srv->setLineDefault(md::noteline::RIGHTMIDDLE, 60, ServoSide::LEFT);
-	srv->setLineDefault(md::noteline::RIGHT, 75, ServoSide::LEFT);
+	srv->setLineDefault(md::noteline::RIGHTMIDDLE, 65, ServoSide::LEFT);
+	srv->setLineDefault(md::noteline::RIGHT, 85, ServoSide::LEFT);
+	srv->setLineDefault(md::noteline::LEFT, -85, ServoSide::RIGHT);
+	srv->setLineDefault(md::noteline::LEFTMIDDLE, -55, ServoSide::RIGHT);
+	srv->setLineDefault(md::noteline::MIDDLE, -35, ServoSide::RIGHT);
+	srv->setLineDefault(md::noteline::RIGHTMIDDLE, -7, ServoSide::RIGHT);
+	srv->setLineDefault(md::noteline::RIGHT, 20, ServoSide::RIGHT);
 
 	Solenoid* solenoid = Solenoid::getInstance();
 	solenoid->tap(SolenoidSide::LEFT);
@@ -207,126 +215,135 @@ int main(void){
 		// 	if(!GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_13)){
 		// 		GPIO_SetBits(GPIOB, GPIO_Pin_14);
 		// 		Delay(100);
-		// 		a += 5; b += 10;
+		// 		a += 5; b += 5;
 		// 		while(!GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_15));
 		// 		Delay(100);
 		// 	} else if(!GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_15)){
 		// 		GPIO_SetBits(GPIOB, GPIO_Pin_15);
 		// 		Delay(100);
-		// 		a -= 5; b -= 10;
+		// 		a -= 5; b -= 5;
 		// 		while(!GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_15));
 		// 		Delay(100);
 		// 	}
 		// 	if(!GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13)){
 		// 		Delay(100);
-		// 		solenoid->tap(SolenoidSide::LEFT);
+		// 		solenoid->tap(SolenoidSide::RIGHT);
 		// 		while(!GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13));
 		// 		Delay(100);
 		// 	}
 		// 	GPIO_ResetBits(GPIOB, GPIO_Pin_14 | GPIO_Pin_15);
 		// 	srv->setAngle(a, ServoSide::LEFT);
-		// 	USART_myprintf(USART1, "SrvAngle: %d\n", a);
+		// 	// srv->setAngle(b, ServoSide::RIGHT);
+		// 	// USART_myprintf(USART1, "SrvAngle: %d\n", a);
 		// 	Delay(20);
 		// }
 
-//		compc->printf("START\n");
-		srv->goLine(md::noteline::RIGHTMIDDLE, ServoSide::LEFT);
+		srv->goLine(md::noteline::LEFT, ServoSide::LEFT);
+		srv->goLine(md::noteline::MIDDLE, ServoSide::RIGHT);
 		Delay(500);
-		while(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13)); {
-			Delay(100);
-			solenoid->tap(SolenoidSide::LEFT);
-			while(!GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13));
-			Delay(100);
-		}
+		while(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13));
+
+		// せーいっぱい
+		solenoid->tap(SolenoidSide::RIGHT);
+		Delay(100);
+		srv->goLine(md::noteline::RIGHT, ServoSide::RIGHT);
+		Delay(225);
+		solenoid->tap(SolenoidSide::RIGHT);
+		Delay(320);
+		solenoid->tap(SolenoidSide::RIGHT);
+		Delay(645);
+
+		// かがやく
+		solenoid->tap(SolenoidSide::RIGHT);
+		Delay(50);
+		srv->goLine(md::noteline::RIGHTMIDDLE, ServoSide::RIGHT);
+		Delay(113);
+		solenoid->tap(SolenoidSide::RIGHT);
+		Delay(50);
+		srv->goLine(md::noteline::MIDDLE, ServoSide::RIGHT);
+		Delay(113);
+		solenoid->tap(SolenoidSide::RIGHT);
+		Delay(50);
+		srv->goLine(md::noteline::LEFTMIDDLE, ServoSide::RIGHT);
+		Delay(113);
+		solenoid->tap(SolenoidSide::RIGHT);
+		Delay(645);
+
+		// かーがやーく
+		solenoid->tap(SolenoidSide::LEFT, 337);
+		Delay(320);
+		solenoid->tap(SolenoidSide::RIGHT);
+		Delay(50);
+		srv->goLine(md::noteline::RIGHT, ServoSide::RIGHT);
+		Delay(113);
+		solenoid->tap(SolenoidSide::RIGHT);
+		Delay(50);
+		srv->goLine(md::noteline::RIGHTMIDDLE, ServoSide::RIGHT);
+		Delay(270);
+		solenoid->tap(SolenoidSide::RIGHT);
+
+		// 星に
+		Delay(645);
+		solenoid->tap(SolenoidSide::RIGHT);
+		Delay(50);
+		srv->goLine(md::noteline::MIDDLE, ServoSide::RIGHT);
+		Delay(113);
+		solenoid->tap(SolenoidSide::RIGHT);
+		Delay(50);
+		srv->goLine(md::noteline::LEFTMIDDLE, ServoSide::RIGHT);
+		Delay(113);
+		solenoid->tap(SolenoidSide::RIGHT);
+		Delay(320);
+
+		// なーれ
+		solenoid->tap(SolenoidSide::LEFT, 1011);
+		Delay(480);
+		solenoid->tap(SolenoidSide::RIGHT, 505);
+		Delay(820);
+
+		srv->goLine(md::noteline::RIGHTMIDDLE, ServoSide::RIGHT);
+		solenoid->tap(SolenoidSide::LEFT);
+		Delay(163);
+		solenoid->tap(SolenoidSide::LEFT);
+		Delay(50);
 		srv->goLine(md::noteline::LEFTMIDDLE, ServoSide::LEFT);
-		Delay(500);
-		while(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13)); {
-			Delay(100);
-			solenoid->tap(SolenoidSide::LEFT);
-			while(!GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13));
-			Delay(100);
-		}
+		Delay(113);
+		solenoid->tap(SolenoidSide::LEFT);
+		Delay(50);
 		srv->goLine(md::noteline::MIDDLE, ServoSide::LEFT);
-		Delay(500);
-		while(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13)); {
-			Delay(100);
-			solenoid->tap(SolenoidSide::LEFT);
-			while(!GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13));
-			Delay(100);
-		}
+		Delay(113);
+		solenoid->tap(SolenoidSide::LEFT);
+		Delay(50);
+		srv->goLine(md::noteline::LEFT, ServoSide::LEFT);
+		srv->goLine(md::noteline::MIDDLE, ServoSide::RIGHT);
+		Delay(310);
+
+		// のドア
+		solenoid->tap(SolenoidSide::RIGHT);
+		Delay(50);
+		srv->goLine(md::noteline::RIGHTMIDDLE, ServoSide::RIGHT);
+		Delay(113);
+		solenoid->tap(SolenoidSide::RIGHT);
+		Delay(50);
+		srv->goLine(md::noteline::RIGHT, ServoSide::RIGHT);
+		Delay(113);
+		solenoid->tap(SolenoidSide::RIGHT);
+		Delay(50);
+		srv->goLine(md::noteline::RIGHTMIDDLE, ServoSide::LEFT);
+		Delay(310);
+		solenoid->tap(SolenoidSide::LEFT);
+		Delay(50);
 		srv->goLine(md::noteline::MIDDLE, ServoSide::LEFT);
-		Delay(500);
-		while(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13)); {
-			Delay(100);
-			solenoid->tap(SolenoidSide::LEFT, 2000);
-			while(!GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13));
-			Delay(2000);
-		}
-		srv->goLine(md::noteline::RIGHTMIDDLE, ServoSide::LEFT);
-		Delay(500);
-		while(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13)); {
-			Delay(100);
-			solenoid->tap(SolenoidSide::LEFT);
-			while(!GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13));
-			Delay(100);
-		}
+		Delay(113);
+		solenoid->tap(SolenoidSide::LEFT);
+		Delay(50);
 		srv->goLine(md::noteline::LEFTMIDDLE, ServoSide::LEFT);
-		Delay(500);
-		while(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13)); {
-			Delay(100);
-			solenoid->tap(SolenoidSide::LEFT);
-			while(!GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13));
-			Delay(100);
-		}
-		srv->goLine(md::noteline::RIGHTMIDDLE, ServoSide::LEFT);
-		Delay(500);
-		while(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13)); {
-			Delay(100);
-			solenoid->tap(SolenoidSide::LEFT);
-			while(!GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13));
-			Delay(100);
-		}
-		srv->goLine(md::noteline::LEFTMIDDLE, ServoSide::LEFT);
-		Delay(500);
-		while(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13)); {
-			Delay(100);
-			solenoid->tap(SolenoidSide::LEFT);
-			while(!GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13));
-			Delay(100);
-		}
-		srv->goLine(md::noteline::LEFTMIDDLE, ServoSide::LEFT);
-		Delay(500);
-		while(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13)); {
-			Delay(100);
-			solenoid->tap(SolenoidSide::LEFT);
-			while(!GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13));
-			Delay(100);
-		}
-		srv->goLine(md::noteline::RIGHTMIDDLE, ServoSide::LEFT);
-		Delay(500);
-		while(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13)); {
-			Delay(100);
-			solenoid->tap(SolenoidSide::LEFT);
-			while(!GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13));
-			Delay(100);
-		}
-		srv->goLine(md::noteline::RIGHTMIDDLE, ServoSide::LEFT);
-		Delay(500);
-		while(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13)); {
-			Delay(100);
-			solenoid->tap(SolenoidSide::LEFT);
-			while(!GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13));
-			Delay(100);
-		}
-		srv->goLine(md::noteline::MIDDLE, ServoSide::LEFT);
-		Delay(500);
-		while(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13)); {
-			Delay(100);
-			solenoid->tap(SolenoidSide::LEFT, 2000);
-			while(!GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13));
-			Delay(2000);
-		}
-//		compc->printf("END\n");
+		Delay(113);
+		solenoid->tap(SolenoidSide::LEFT);
+		Delay(50);
+		srv->goLine(md::noteline::LEFT, ServoSide::LEFT);
+		Delay(113);
+
 		while(true);
 	}
 }
