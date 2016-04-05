@@ -14,7 +14,7 @@ private:
 	uint16_t activated_time[2];
 
 public:
-	void tap(SolenoidSide, uint16_t duration = 10);
+	void tap(SolenoidSide, uint16_t duration = 50);
 
 	void interrupt();
 	static Solenoid* getInstance();

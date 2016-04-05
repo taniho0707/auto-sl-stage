@@ -17,7 +17,7 @@ Solenoid::Solenoid(){
 	GPIO_ResetBits(GPIOA, GPIO_Pin_12);
 }
 
-void Solenoid::tap(SolenoidSide side, uint16_t duration = 10){
+void Solenoid::tap(SolenoidSide side, uint16_t duration){
 	activated_time[static_cast<uint8_t>(side)] = duration;
 	if(side == SolenoidSide::LEFT)
 		GPIO_SetBits(GPIOA, GPIO_Pin_12);
