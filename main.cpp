@@ -221,12 +221,12 @@ int main(void){
 	md::MusicData d;
 	compc.printf("MusicData initializing...\n");
 	d.setNoteManual(0, notetype::SINGLE, noteline::LEFT, 8, notehand::LEFT, 0);
-	d.setNoteManual(1, notetype::SINGLE, noteline::RIGHT, 1, notehand::RIGHT, 0);
-	d.setNoteManual(2, notetype::SINGLE, noteline::RIGHT, 2, notehand::RIGHT, T_4);
-	d.setNoteManual(3, notetype::SINGLE, noteline::RIGHT, 3, notehand::RIGHT, T_4);
-	d.setNoteManual(4, notetype::SINGLE, noteline::RIGHT, 4, notehand::RIGHT, T_4 * 2);
-	d.setNoteManual(5, notetype::SINGLE, noteline::RIGHTMIDDLE, 5, notehand::RIGHT, T_8);
-	d.setNoteManual(6, notetype::SINGLE, noteline::MIDDLE, 6, notehand::RIGHT, T_8);
+	d.setNoteManual(1, notetype::SINGLE, noteline::RIGHT, 2, notehand::RIGHT, 0);
+	d.setNoteManual(2, notetype::SINGLE, noteline::RIGHT, 3, notehand::RIGHT, T_4);
+	d.setNoteManual(3, notetype::SINGLE, noteline::RIGHT, 4, notehand::RIGHT, T_4);
+	d.setNoteManual(4, notetype::SINGLE, noteline::RIGHT, 5, notehand::RIGHT, T_4 * 2);
+	d.setNoteManual(5, notetype::SINGLE, noteline::RIGHTMIDDLE, 6, notehand::RIGHT, T_8);
+	d.setNoteManual(6, notetype::SINGLE, noteline::MIDDLE, 7, notehand::RIGHT, T_8);
 	d.setNoteManual(7, notetype::SINGLE, noteline::LEFTMIDDLE, 10, notehand::RIGHT, T_8);
 	d.setNoteManual(8, notetype::SINGLE, noteline::LEFTMIDDLE, 11, notehand::LEFT, 0);
 	compc.printf("All data loaded.\n\n");

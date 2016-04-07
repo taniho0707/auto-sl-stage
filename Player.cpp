@@ -6,7 +6,7 @@ Player::Player(){
 	servo = Servo::getInstance();
 	solenoid = Solenoid::getInstance();
 	curpos[0] = 0;
-	curpos[1] = 0;
+	curpos[1] = 1;
 	releasetime[0] = 0;
 	releasetime[1] = 0;
 	enabled = false;
@@ -31,6 +31,8 @@ bool Player::done(){
 
 void Player::interrupt(){
 	if(enabled){
+		cp.printf("T:%d, ", time);
+		cp.printf("Lpos:%d, Rpos:%d\n", curpos.at(0), curpos.at(1));
 		// if time to tap next note
 		if(data.getTime(curpos[static_cast<uint8_t>(notehand::LEFT)]) == time){
 			uint16_t tmp_length = 50;
@@ -119,7 +121,7 @@ void Player::interrupt(){
 				tmp_length = 0;
 				break;
 			}
-			++ curpos.at(static_cast<uint8_t>(notehand::LEFT));
+			curpos.at(static_cast<uint8_t>(notehand::LEFT)) = data.getNext(curpos.at(static_cast<uint8_t>(notehand::LEFT)));
 		}
 		if(data.getTime(curpos[static_cast<uint8_t>(notehand::RIGHT)]) == time){
 			uint16_t tmp_length = 50;
@@ -208,7 +210,7 @@ void Player::interrupt(){
 				tmp_length = 0;
 				break;
 			}
-			++ curpos.at(static_cast<uint8_t>(notehand::RIGHT));
+			curpos.at(static_cast<uint8_t>(notehand::RIGHT)) = data.getNext(curpos.at(static_cast<uint8_t>(notehand::RIGHT)));
 		}
 		
 		// if time to release

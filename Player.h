@@ -2,6 +2,8 @@
 
 #include <array>
 
+#include "ComPc.h"
+
 #include "MusicData.h"
 #include "ComPc.h"
 #include "Servo.h"
@@ -13,6 +15,7 @@ private:
 	Servo* servo;
 	Solenoid* solenoid;
 	md::MusicData data;
+	ComPc cp;
 
 	std::array<uint16_t, 2> curpos;
 	std::array<uint16_t, 2> releasetime;
