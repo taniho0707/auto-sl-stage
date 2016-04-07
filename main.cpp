@@ -183,7 +183,8 @@ int main(void){
 	GPIO_ResetBits(GPIOB, GPIO_Pin_12);
 	Delay(20);
 
-//	ComPc* compc = ComPc::getInstance();
+	// ComPc* compc = ComPc::getInstance();
+	ComPc compc;
 
 	Servo* srv = Servo::getInstance();
 	srv->enable(ServoSide::LEFT);
@@ -209,6 +210,8 @@ int main(void){
 
 	int16_t a = 0;
 	int16_t b = 0;
+
+	compc.printf("Hello auto-sl-stage\n");
 
 	while (1){
 		// while(1){

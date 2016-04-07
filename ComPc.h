@@ -6,27 +6,25 @@
 #include <vector>
 
 #include "stm32f4xx.h"
-#include "stm32f4xx_it.h"
 
 
-class ComPc{
+class ComPc {
 private:
-	explicit ComPc();
-
 	std::vector<uint8_t> recvdata;
 
 public:
-	uint8_t buffer[100];
-	
-	static ComPc *getInstance();
+	ComPc();
+	// static ComPc* getInstance();
 
-	void send1byte(const char data);
-	void sendnbyte(const char *c, const int n);
-	uint16_t printf(const char *fmt, ...);
+	void send1byte(const char);
+	void sendnbyte(const char*, const int);
+	uint16_t printf(const char* fmt, ...);
+
+	bool recv1byte(uint8_t&);
 
 	bool isEmpty();
 	std::vector<uint8_t> getRecvData();
 
 	void interrupt_recv();
-};
 
+};
