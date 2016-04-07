@@ -3,11 +3,15 @@
 using namespace std;
 
 md::MusicData::MusicData(){
-	
+	data.resize(10);
 }
 
 md::MusicData::~MusicData(){
 	
+}
+
+uint16_t md::MusicData::size(){
+	return static_cast<uint16_t>(data.size());
 }
 
 bool md::MusicData::setNote(uint16_t num, struct note d){
@@ -22,6 +26,19 @@ uint16_t md::MusicData::setNotes(uint16_t start, struct note* d, uint16_t length
 		setNote(start+i, d[i]);
 	return length;
 }
+
+void md::MusicData::setNoteManual(uint16_t pos, md::notetype type, md::noteline line, unsigned next, md::notehand hand, unsigned fromlasttime){
+	struct note tmp = {
+		static_cast<unsigned>(type),
+		((pos == 0) ? 0 : (data.at(pos-1).time)) + fromlasttime,
+		next,
+		static_cast<unsigned>(hand),
+		static_cast<unsigned>(line),
+		0
+	};
+	setNote(pos, tmp);
+}
+
 
 md::notetype md::MusicData::getType(uint16_t num){
 	if(data.size() < num) return md::notetype::ERROR;

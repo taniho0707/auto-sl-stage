@@ -79,6 +79,10 @@ namespace md{
 		bool setNote(uint16_t, struct note);
 		uint16_t setNotes(uint16_t, struct note*, uint16_t);
 
+		void setNoteManual(uint16_t pos, notetype type, noteline line, unsigned next, notehand hand, unsigned fromlasttime);
+
+		uint16_t size();
+
 		notetype getType(uint16_t);
 		uint32_t getTime(uint16_t);
 		uint16_t getNext(uint16_t);
