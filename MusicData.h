@@ -24,6 +24,8 @@ namespace md{
 		MIDDLE,
 		RIGHTMIDDLE,
 		RIGHT,
+		MORELEFT,
+		MORERIGHT,
 		NONE = 7
 	};
 
