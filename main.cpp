@@ -138,6 +138,8 @@ void printChar(uint8_t c){
 }
 
 
+using namespace md;
+
 int main(void){
 	SystemInit();
 	RCC_GetClocksFreq(&RCC_Clocks);
@@ -159,6 +161,9 @@ int main(void){
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1;
+	GPIO_Init(GPIOC, &GPIO_InitStructure);
 
 	Delay(500);
 	initLCD();
@@ -208,12 +213,32 @@ int main(void){
 	solenoid->tap(SolenoidSide::LEFT);
 	solenoid->tap(SolenoidSide::RIGHT);
 
-	int16_t a = 0;
-	int16_t b = 0;
+	compc.printf("Hello auto-sl-stage\n\n");
 
-	compc.printf("Hello auto-sl-stage\n");
+	const uint16_t T_4 = 320;
+	const uint16_t T_8 = 160;
+
+	md::MusicData d;
+	compc.printf("MusicData initializing...\n");
+	d.setNoteManual(0, notetype::SINGLE, noteline::LEFT, 8, notehand::LEFT, 0);
+	d.setNoteManual(1, notetype::SINGLE, noteline::RIGHT, 1, notehand::RIGHT, 0);
+	d.setNoteManual(2, notetype::SINGLE, noteline::RIGHT, 2, notehand::RIGHT, T_4);
+	d.setNoteManual(3, notetype::SINGLE, noteline::RIGHT, 3, notehand::RIGHT, T_4);
+	d.setNoteManual(4, notetype::SINGLE, noteline::RIGHT, 4, notehand::RIGHT, T_4 * 2);
+	d.setNoteManual(5, notetype::SINGLE, noteline::RIGHTMIDDLE, 5, notehand::RIGHT, T_8);
+	d.setNoteManual(6, notetype::SINGLE, noteline::MIDDLE, 6, notehand::RIGHT, T_8);
+	d.setNoteManual(7, notetype::SINGLE, noteline::LEFTMIDDLE, 10, notehand::RIGHT, T_8);
+	d.setNoteManual(8, notetype::SINGLE, noteline::LEFTMIDDLE, 11, notehand::LEFT, 0);
+	compc.printf("All data loaded.\n\n");
+
+	Player player;
+	compc.printf("Player initializing...\n");
+	player.initialize(d);
+	compc.printf("Player loading done\n");
 
 	while (1){
+		// int16_t a = 0;
+		// int16_t b = 0;
 		// while(1){
 		// 	if(!GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_13)){
 		// 		GPIO_SetBits(GPIOB, GPIO_Pin_14);
@@ -241,112 +266,16 @@ int main(void){
 		// 	Delay(20);
 		// }
 
-		srv->goLine(md::noteline::LEFT, ServoSide::LEFT);
-		srv->goLine(md::noteline::MIDDLE, ServoSide::RIGHT);
 		Delay(500);
 		while(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13));
+		player.start();
+		while(true){
+			player.interrupt();
+			Delay(1);
+			if(player.done()) break;
+		}
 
-		// せーいっぱい
-		solenoid->tap(SolenoidSide::RIGHT);
-		Delay(100);
-		srv->goLine(md::noteline::RIGHT, ServoSide::RIGHT);
-		Delay(225);
-		solenoid->tap(SolenoidSide::RIGHT);
-		Delay(320);
-		solenoid->tap(SolenoidSide::RIGHT);
-		Delay(645);
-
-		// かがやく
-		solenoid->tap(SolenoidSide::RIGHT);
-		Delay(50);
-		srv->goLine(md::noteline::RIGHTMIDDLE, ServoSide::RIGHT);
-		Delay(113);
-		solenoid->tap(SolenoidSide::RIGHT);
-		Delay(50);
-		srv->goLine(md::noteline::MIDDLE, ServoSide::RIGHT);
-		Delay(113);
-		solenoid->tap(SolenoidSide::RIGHT);
-		Delay(50);
-		srv->goLine(md::noteline::LEFTMIDDLE, ServoSide::RIGHT);
-		Delay(113);
-		solenoid->tap(SolenoidSide::RIGHT);
-		Delay(645);
-
-		// かーがやーく
-		solenoid->tap(SolenoidSide::LEFT, 337);
-		Delay(320);
-		solenoid->tap(SolenoidSide::RIGHT);
-		Delay(50);
-		srv->goLine(md::noteline::RIGHT, ServoSide::RIGHT);
-		Delay(113);
-		solenoid->tap(SolenoidSide::RIGHT);
-		Delay(50);
-		srv->goLine(md::noteline::RIGHTMIDDLE, ServoSide::RIGHT);
-		Delay(270);
-		solenoid->tap(SolenoidSide::RIGHT);
-
-		// 星に
-		Delay(645);
-		solenoid->tap(SolenoidSide::RIGHT);
-		Delay(50);
-		srv->goLine(md::noteline::MIDDLE, ServoSide::RIGHT);
-		Delay(113);
-		solenoid->tap(SolenoidSide::RIGHT);
-		Delay(50);
-		srv->goLine(md::noteline::LEFTMIDDLE, ServoSide::RIGHT);
-		Delay(113);
-		solenoid->tap(SolenoidSide::RIGHT);
-		Delay(320);
-
-		// なーれ
-		solenoid->tap(SolenoidSide::LEFT, 1011);
-		Delay(480);
-		solenoid->tap(SolenoidSide::RIGHT, 505);
-		Delay(820);
-
-		srv->goLine(md::noteline::RIGHTMIDDLE, ServoSide::RIGHT);
-		solenoid->tap(SolenoidSide::LEFT);
-		Delay(163);
-		solenoid->tap(SolenoidSide::LEFT);
-		Delay(50);
-		srv->goLine(md::noteline::LEFTMIDDLE, ServoSide::LEFT);
-		Delay(113);
-		solenoid->tap(SolenoidSide::LEFT);
-		Delay(50);
-		srv->goLine(md::noteline::MIDDLE, ServoSide::LEFT);
-		Delay(113);
-		solenoid->tap(SolenoidSide::LEFT);
-		Delay(50);
-		srv->goLine(md::noteline::LEFT, ServoSide::LEFT);
-		srv->goLine(md::noteline::MIDDLE, ServoSide::RIGHT);
-		Delay(310);
-
-		// のドア
-		solenoid->tap(SolenoidSide::RIGHT);
-		Delay(50);
-		srv->goLine(md::noteline::RIGHTMIDDLE, ServoSide::RIGHT);
-		Delay(113);
-		solenoid->tap(SolenoidSide::RIGHT);
-		Delay(50);
-		srv->goLine(md::noteline::RIGHT, ServoSide::RIGHT);
-		Delay(113);
-		solenoid->tap(SolenoidSide::RIGHT);
-		Delay(50);
-		srv->goLine(md::noteline::RIGHTMIDDLE, ServoSide::LEFT);
-		Delay(310);
-		solenoid->tap(SolenoidSide::LEFT);
-		Delay(50);
-		srv->goLine(md::noteline::MIDDLE, ServoSide::LEFT);
-		Delay(113);
-		solenoid->tap(SolenoidSide::LEFT);
-		Delay(50);
-		srv->goLine(md::noteline::LEFTMIDDLE, ServoSide::LEFT);
-		Delay(113);
-		solenoid->tap(SolenoidSide::LEFT);
-		Delay(50);
-		srv->goLine(md::noteline::LEFT, ServoSide::LEFT);
-		Delay(113);
-
+		compc.printf("DONE!\n");
 		while(true);
 	}
 }

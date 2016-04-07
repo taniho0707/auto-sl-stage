@@ -10,5 +10,7 @@
 
 #include "ComPc.h"
 
+#include "Player.h"
+
 void TimingDelay_Decrement(void);
 

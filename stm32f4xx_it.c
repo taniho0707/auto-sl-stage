@@ -42,14 +42,6 @@
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
-void TIM2_IRQHandler(void){
-	if(TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET){
-		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
-		/* GPIO_ToggleBits(GPIOA, GPIO_Pin_5); */
-	}
-}
-
-
 /******************************************************************************/
 /*            Cortex-M4 Processor Exceptions Handlers                         */
 /******************************************************************************/

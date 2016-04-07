@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+
 #include "MusicData.h"
 #include "ComPc.h"
 #include "Servo.h"
@@ -12,10 +14,20 @@ private:
 	Solenoid* solenoid;
 	md::MusicData data;
 
-	Player();
+	std::array<uint16_t, 2> curpos;
+	std::array<uint16_t, 2> releasetime;
+
+	uint32_t time;
+	bool enabled;
+	uint32_t endtime;
 
 public:
+	Player();
+
 	void initialize(md::MusicData&);
 	void start();
+	bool done();
+
+	void interrupt();
 };
 
