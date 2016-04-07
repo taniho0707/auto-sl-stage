@@ -25,6 +25,16 @@ void Solenoid::tap(SolenoidSide side, uint16_t duration){
 		GPIO_SetBits(GPIOA, GPIO_Pin_11);
 }
 
+bool Solenoid::extend(SolenoidSide side, uint16_t duration){
+	if(activated_time[static_cast<uint8_t>(side)] != 0){
+		activated_time[static_cast<uint8_t>(side)] += duration;
+		return true;
+	} else {
+		return false;
+	}
+}
+
+
 void Solenoid::interrupt(){
 	if(activated_time[0] > 0){
 		--activated_time[0];

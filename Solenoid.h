@@ -15,6 +15,7 @@ private:
 
 public:
 	void tap(SolenoidSide, uint16_t duration = 50);
+	bool extend(SolenoidSide, uint16_t duration);
 
 	void interrupt();
 	static Solenoid* getInstance();
