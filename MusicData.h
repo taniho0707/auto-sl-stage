@@ -35,6 +35,12 @@ namespace md{
 		ERROR = 3
 	};
 
+	enum class notetap : uint8_t {
+		TAP,
+		NOTAP,
+		ERROR = 3
+	};
+
 	/* ノーツデータ
 	   1. ノーツタイプ
 	      4bit
@@ -46,9 +52,12 @@ namespace md{
 	      10bit
 	   4. 演奏腕
 	      1bit
-		  右，左
+	      右，左
 	   5. ノーツライン
 	      3bit
+	   6. 打鍵有無
+	      1bit
+	      あり，なし
 	*/
 	struct note {
 		unsigned type : 4;
@@ -56,7 +65,8 @@ namespace md{
 		unsigned next : 10;
 		unsigned hand : 2;
 		unsigned line : 3;
-		unsigned : 28;
+		unsigned tap : 2;
+		unsigned : 25;
 	} __attribute__ ((__packed__));
 
 	class MusicData {
@@ -74,6 +84,7 @@ namespace md{
 		uint16_t getNext(uint16_t);
 		notehand getHand(uint16_t);
 		noteline getLine(uint16_t);
+		notetap getTap(uint16_t);
 		
 		~MusicData();
 	};

@@ -47,6 +47,9 @@ md::notehand md::MusicData::getHand(uint16_t num){
 md::noteline md::MusicData::getLine(uint16_t num){
 	if(data.size() < num) return md::noteline::NONE;
 	return static_cast<md::noteline>(data.at(num).line);
-
 }
 
+md::notetap md::MusicData::getTap(uint16_t num){
+	if(data.size() < num) return md::notetap::ERROR;
+	return static_cast<md::notetap>(data.at(num).tap);
+}
