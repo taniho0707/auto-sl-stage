@@ -13,9 +13,9 @@ Player::Player(){
 	time = 0;
 }
 
-void Player::initialize(md::MusicData& d){
+void Player::initialize(md::MusicData& d, uint32_t e){
 	data = d;
-	endtime = data.getTime(data.size()-1) + 100;
+	endtime = e;
 	servo->goLine(data.getLine(curpos.at(static_cast<uint8_t>(notehand::LEFT))), ServoSide::LEFT);
 	servo->goLine(data.getLine(curpos.at(static_cast<uint8_t>(notehand::RIGHT))), ServoSide::RIGHT);
 }
@@ -31,8 +31,6 @@ bool Player::done(){
 
 void Player::interrupt(){
 	if(enabled){
-		cp.printf("T:%d, ", time);
-		cp.printf("Lpos:%d, Rpos:%d\n", curpos.at(0), curpos.at(1));
 		// if time to tap next note
 		if(data.getTime(curpos[static_cast<uint8_t>(notehand::LEFT)]) == time){
 			uint16_t tmp_length = 50;
@@ -47,24 +45,44 @@ void Player::interrupt(){
 			case notetype::SLIDELEFT_START:
 				tmp_length
 					= data.getTime(data.getNext(curpos.at(static_cast<uint8_t>(notehand::LEFT))))
-					- data.getTime(curpos.at(static_cast<uint8_t>(notehand::LEFT)))
-					+ 1;
+					- data.getTime(curpos.at(static_cast<uint8_t>(notehand::LEFT)));
 				// @TODO
-				releasetime.at(static_cast<uint8_t>(notehand::LEFT)) = time + tmp_length - 1;
+				releasetime.at(static_cast<uint8_t>(notehand::LEFT)) = time + tmp_length;
 				// @TODO
 				solenoid->tap(SolenoidSide::LEFT, tmp_length);
+				switch(data.getLine(curpos.at(static_cast<uint8_t>(notehand::LEFT)))){
+				case noteline::LEFT:
+					servo->goLine(noteline::LEFTMIDDLE, ServoSide::LEFT);
+					break;
+				case noteline::LEFTMIDDLE:
+					servo->goLine(noteline::MIDDLE, ServoSide::LEFT);
+					break;
+				case noteline::MIDDLE:
+					servo->goLine(noteline::RIGHTMIDDLE, ServoSide::LEFT);
+					break;
+				case noteline::RIGHTMIDDLE:
+					servo->goLine(noteline::RIGHT, ServoSide::LEFT);
+					break;
+				case noteline::RIGHT:
+					servo->goLine(noteline::MORERIGHT, ServoSide::LEFT);
+					break;
+				default:
+					break;
+				}
 				break;
 			case notetype::LONG_END:
 				tmp_length = 0;
 				break;
 			case notetype::SLIDERIGHT_CONT:
 			case notetype::SLIDERIGHT_END:
-				tmp_length
-					= data.getTime(data.getNext(curpos.at(static_cast<uint8_t>(notehand::LEFT))))
-					- data.getTime(curpos.at(static_cast<uint8_t>(notehand::LEFT)))
-					+ 1;
+				if(data.getType(curpos.at(static_cast<uint8_t>(notehand::LEFT))) == notetype::SLIDERIGHT_CONT)
+					tmp_length
+						= data.getTime(data.getNext(curpos.at(static_cast<uint8_t>(notehand::LEFT))))
+						- data.getTime(curpos.at(static_cast<uint8_t>(notehand::LEFT)));
+				else
+					tmp_length = 100;
 				// @TODO
-				releasetime.at(static_cast<uint8_t>(notehand::LEFT)) = time + tmp_length - 1;
+				releasetime.at(static_cast<uint8_t>(notehand::LEFT)) = time + tmp_length;
 				// @TODO
 				solenoid->extend(SolenoidSide::LEFT, tmp_length);
 				switch(data.getLine(curpos.at(static_cast<uint8_t>(notehand::LEFT)))){
@@ -91,10 +109,9 @@ void Player::interrupt(){
 			case notetype::SLIDELEFT_END:
 				tmp_length
 					= data.getTime(data.getNext(curpos.at(static_cast<uint8_t>(notehand::LEFT))))
-					- data.getTime(curpos.at(static_cast<uint8_t>(notehand::LEFT)))
-					+ 1;
+					- data.getTime(curpos.at(static_cast<uint8_t>(notehand::LEFT)));
 				// @TODO
-				releasetime.at(static_cast<uint8_t>(notehand::LEFT)) = time + tmp_length - 1;
+				releasetime.at(static_cast<uint8_t>(notehand::LEFT)) = time + tmp_length;
 				// @TODO
 				solenoid->extend(SolenoidSide::LEFT, tmp_length);
 				switch(data.getLine(curpos.at(static_cast<uint8_t>(notehand::LEFT)))){
@@ -141,7 +158,7 @@ void Player::interrupt(){
 				// @TODO
 				releasetime.at(static_cast<uint8_t>(notehand::RIGHT)) = time + tmp_length - 1;
 				// @TODO
-				solenoid->tap(SolenoidSide::LEFT, tmp_length);
+				solenoid->tap(SolenoidSide::RIGHT, tmp_length);
 				break;
 			case notetype::LONG_END:
 				tmp_length = 0;

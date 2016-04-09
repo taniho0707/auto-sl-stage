@@ -27,7 +27,7 @@ private:
 public:
 	Player();
 
-	void initialize(md::MusicData&);
+	void initialize(md::MusicData&, uint32_t);
 	void start();
 	bool done();
 
