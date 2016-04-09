@@ -3,7 +3,7 @@
 using namespace std;
 
 md::MusicData::MusicData(){
-	data.resize(10);
+	data.resize(500);
 }
 
 md::MusicData::~MusicData(){

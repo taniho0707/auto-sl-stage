@@ -198,21 +198,34 @@ int main(void){
 	GPIO_ResetBits(GPIOB, GPIO_Pin_14 | GPIO_Pin_15);
 	srv->setAngle(-40, ServoSide::LEFT);
 	srv->setAngle(45, ServoSide::RIGHT);
-	srv->setLineDefault(md::noteline::MORELEFT, -50, ServoSide::LEFT);
-	srv->setLineDefault(md::noteline::LEFT, -32, ServoSide::LEFT);
-	srv->setLineDefault(md::noteline::LEFTMIDDLE, -10, ServoSide::LEFT);
-	srv->setLineDefault(md::noteline::MIDDLE, 13, ServoSide::LEFT);
-	srv->setLineDefault(md::noteline::RIGHTMIDDLE, 35, ServoSide::LEFT);
-	srv->setLineDefault(md::noteline::RIGHT, 55, ServoSide::LEFT);
-	srv->setLineDefault(md::noteline::MORERIGHT, 90, ServoSide::LEFT);
-
-	srv->setLineDefault(md::noteline::MORELEFT, -60, ServoSide::RIGHT);
-	srv->setLineDefault(md::noteline::LEFT, -35, ServoSide::RIGHT);
-	srv->setLineDefault(md::noteline::LEFTMIDDLE, -15, ServoSide::RIGHT);
-	srv->setLineDefault(md::noteline::MIDDLE, 5, ServoSide::RIGHT);
-	srv->setLineDefault(md::noteline::RIGHTMIDDLE, 28, ServoSide::RIGHT);
-	srv->setLineDefault(md::noteline::RIGHT, 55, ServoSide::RIGHT);
-	srv->setLineDefault(md::noteline::MORERIGHT, 80, ServoSide::RIGHT);
+	srv->setLineDefault(md::noteline::MORELEFT		, -50, ServoSide::LEFT, ServoFrom::LEFT);
+	srv->setLineDefault(md::noteline::LEFT			, -35, ServoSide::LEFT, ServoFrom::LEFT);
+	srv->setLineDefault(md::noteline::LEFTMIDDLE	, -10, ServoSide::LEFT, ServoFrom::LEFT);
+	srv->setLineDefault(md::noteline::MIDDLE		, 5, ServoSide::LEFT, ServoFrom::LEFT);
+	srv->setLineDefault(md::noteline::RIGHTMIDDLE	, 30, ServoSide::LEFT, ServoFrom::LEFT);
+	srv->setLineDefault(md::noteline::RIGHT		, 50, ServoSide::LEFT, ServoFrom::LEFT);
+	srv->setLineDefault(md::noteline::MORERIGHT	, 90, ServoSide::LEFT, ServoFrom::LEFT);
+	srv->setLineDefault(md::noteline::MORELEFT		, -55, ServoSide::LEFT, ServoFrom::RIGHT);
+	srv->setLineDefault(md::noteline::LEFT			, -45, ServoSide::LEFT, ServoFrom::RIGHT);
+	srv->setLineDefault(md::noteline::LEFTMIDDLE	, -25, ServoSide::LEFT, ServoFrom::RIGHT);
+	srv->setLineDefault(md::noteline::MIDDLE		, -5, ServoSide::LEFT, ServoFrom::RIGHT);
+	srv->setLineDefault(md::noteline::RIGHTMIDDLE	, 15, ServoSide::LEFT, ServoFrom::RIGHT);
+	srv->setLineDefault(md::noteline::RIGHT		, 40, ServoSide::LEFT, ServoFrom::RIGHT);
+	srv->setLineDefault(md::noteline::MORERIGHT	, 90, ServoSide::LEFT, ServoFrom::RIGHT);
+	srv->setLineDefault(md::noteline::MORELEFT		, -60, ServoSide::RIGHT, ServoFrom::LEFT);
+	srv->setLineDefault(md::noteline::LEFT			, -35, ServoSide::RIGHT, ServoFrom::LEFT);
+	srv->setLineDefault(md::noteline::LEFTMIDDLE	, -10, ServoSide::RIGHT, ServoFrom::LEFT);
+	srv->setLineDefault(md::noteline::MIDDLE		, 10, ServoSide::RIGHT, ServoFrom::LEFT);
+	srv->setLineDefault(md::noteline::RIGHTMIDDLE	, 30, ServoSide::RIGHT, ServoFrom::LEFT);
+	srv->setLineDefault(md::noteline::RIGHT		, 55, ServoSide::RIGHT, ServoFrom::LEFT);
+	srv->setLineDefault(md::noteline::MORERIGHT	, 80, ServoSide::RIGHT, ServoFrom::LEFT);
+	srv->setLineDefault(md::noteline::MORELEFT		, -60, ServoSide::RIGHT, ServoFrom::RIGHT);
+	srv->setLineDefault(md::noteline::LEFT			, -50, ServoSide::RIGHT, ServoFrom::RIGHT);
+	srv->setLineDefault(md::noteline::LEFTMIDDLE	, -25, ServoSide::RIGHT, ServoFrom::RIGHT);
+	srv->setLineDefault(md::noteline::MIDDLE		, -5, ServoSide::RIGHT, ServoFrom::RIGHT);
+	srv->setLineDefault(md::noteline::RIGHTMIDDLE	, 15, ServoSide::RIGHT, ServoFrom::RIGHT);
+	srv->setLineDefault(md::noteline::RIGHT		, 40, ServoSide::RIGHT, ServoFrom::RIGHT);
+	srv->setLineDefault(md::noteline::MORERIGHT	, 80, ServoSide::RIGHT, ServoFrom::RIGHT);
 
 	Solenoid* solenoid = Solenoid::getInstance();
 	solenoid->tap(SolenoidSide::LEFT);
@@ -260,8 +273,8 @@ int main(void){
 		}
 	}
 
-	const uint16_t T_4 = 326;
-	const uint16_t T_8 = 163;
+	const uint16_t T_4 = 324;
+	const uint16_t T_8 = 162;
 
 	md::MusicData d;
 	compc.printf("MusicData initializing...\n");
@@ -332,6 +345,41 @@ int main(void){
 	d.setNoteManual(64, notetype::SINGLE, noteline::LEFT, 66, notehand::LEFT, T_4 * 3 / 4);
 	d.setNoteManual(65, notetype::SINGLE, noteline::RIGHT, 80, notehand::RIGHT, 0);
 	d.setNoteManual(66, notetype::SINGLE, noteline::MIDDLE, 67, notehand::LEFT, T_4);
+	d.setNoteManual(67, notetype::LONG_START, noteline::LEFTMIDDLE, 68, notehand::LEFT, T_8);
+	d.setNoteManual(68, notetype::LONG_END, noteline::LEFTMIDDLE, 69, notehand::LEFT, T_8 * 3);
+	d.setNoteManual(69, notetype::SINGLE, noteline::LEFT, 70, notehand::LEFT, T_4);
+	d.setNoteManual(70, notetype::SINGLE, noteline::LEFTMIDDLE, 71, notehand::LEFT, T_4);
+	d.setNoteManual(71, notetype::SINGLE, noteline::MIDDLE, 72, notehand::LEFT, T_8);
+	d.setNoteManual(72, notetype::SINGLE, noteline::LEFTMIDDLE, 73, notehand::LEFT, T_4);
+	d.setNoteManual(73, notetype::SINGLE, noteline::LEFTMIDDLE, 74, notehand::LEFT, T_8 * 3);
+	d.setNoteManual(74, notetype::LONG_START, noteline::MIDDLE, 75, notehand::LEFT, T_8 * 3);
+	d.setNoteManual(75, notetype::SLIDELEFT_END, noteline::MIDDLE, 76, notehand::LEFT, T_8 * 7);
+	d.setNoteManual(76, notetype::SINGLE, noteline::LEFT, 77, notehand::LEFT, T_8);
+	d.setNoteManual(77, notetype::SINGLE, noteline::LEFTMIDDLE, 78, notehand::LEFT, T_4);
+	d.setNoteManual(78, notetype::SINGLE, noteline::MIDDLE, 79, notehand::LEFT, T_8);
+	d.setNoteManual(79, notetype::SINGLE, noteline::RIGHTMIDDLE, 82, notehand::LEFT, T_8);
+	d.setNoteManual(80, notetype::LONG_START, noteline::RIGHT, 81, notehand::RIGHT, T_8);
+	d.setNoteManual(81, notetype::SLIDELEFT_END, noteline::RIGHT, 90, notehand::RIGHT, T_8 * 3);
+	d.setNoteManual(82, notetype::SINGLE, noteline::MIDDLE, 83, notehand::LEFT, T_4);
+	d.setNoteManual(83, notetype::SINGLE, noteline::LEFTMIDDLE, 84, notehand::LEFT, T_8);
+	d.setNoteManual(84, notetype::SINGLE, noteline::MIDDLE, 85, notehand::LEFT, T_8);
+	d.setNoteManual(85, notetype::SINGLE, noteline::RIGHTMIDDLE, 86, notehand::LEFT, T_8);
+	d.setNoteManual(86, notetype::SINGLE, noteline::MIDDLE, 87, notehand::LEFT, T_4);
+	d.setNoteManual(87, notetype::LONG_START, noteline::LEFTMIDDLE, 88, notehand::LEFT, T_8);
+	d.setNoteManual(88, notetype::LONG_END, noteline::LEFTMIDDLE, 89, notehand::LEFT, T_8 * 3);
+	d.setNoteManual(89, notetype::SINGLE, noteline::LEFT, 96, notehand::LEFT, T_4);
+	d.setNoteManual(90, notetype::SINGLE, noteline::RIGHT, 91, notehand::RIGHT, 0);
+	d.setNoteManual(91, notetype::SINGLE, noteline::RIGHT, 92, notehand::RIGHT, T_8);
+	d.setNoteManual(92, notetype::SINGLE, noteline::RIGHTMIDDLE, 93, notehand::RIGHT, T_8);
+	d.setNoteManual(93, notetype::SINGLE, noteline::RIGHTMIDDLE, 94, notehand::RIGHT, T_8);
+	d.setNoteManual(94, notetype::SINGLE, noteline::MIDDLE, 95, notehand::RIGHT, T_8);
+	d.setNoteManual(95, notetype::SINGLE, noteline::MIDDLE, 97, notehand::RIGHT, T_8);
+	d.setNoteManual(96, notetype::SINGLE, noteline::LEFTMIDDLE, 98, notehand::LEFT, T_8);
+	d.setNoteManual(97, notetype::LONG_START, noteline::RIGHTMIDDLE, 99, notehand::RIGHT, T_8);
+	d.setNoteManual(98, notetype::SINGLE, noteline::LEFTMIDDLE, 100, notehand::LEFT, T_4);
+	d.setNoteManual(99, notetype::LONG_END, noteline::RIGHTMIDDLE, 101, notehand::RIGHT, 0);
+	d.setNoteManual(100, notetype::SINGLE, noteline::LEFTMIDDLE, 102, notehand::LEFT, T_8);
+	d.setNoteManual(101, notetype::SINGLE, noteline::RIGHTMIDDLE, 104, notehand::RIGHT, 0);
 //	d.setNoteManual(, notetype::, noteline::, , notehand::, T_);
 	compc.printf("All data loaded.\n\n");
 

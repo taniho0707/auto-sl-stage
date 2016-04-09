@@ -19,12 +19,12 @@ namespace md{
 	};
 
 	enum class noteline : uint8_t {
+		MORELEFT,
 		LEFT,
 		LEFTMIDDLE,
 		MIDDLE,
 		RIGHTMIDDLE,
 		RIGHT,
-		MORELEFT,
 		MORERIGHT,
 		NONE = 7
 	};

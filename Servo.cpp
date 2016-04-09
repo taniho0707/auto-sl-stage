@@ -57,10 +57,6 @@ Servo::Servo(){
 	TIM_ITConfig(TIM5, TIM_IT_Update, ENABLE);
 	TIM_ARRPreloadConfig(TIM5, ENABLE);
 	TIM_CtrlPWMOutputs(TIM5, ENABLE);
-
-	for(auto i=0; i<2; ++i)
-		for(auto j=0; j<7; ++j)
-			defaultpos[i][j] = 0;
 }
 
 void Servo::enable(ServoSide side){
@@ -102,13 +98,18 @@ void Servo::setAngle(int16_t angle, ServoSide side){
 	}
 }
 
-void Servo::setLineDefault(
-	md::noteline line, int16_t angle, ServoSide side){
-	defaultpos[static_cast<uint16_t>(side)][static_cast<uint16_t>(line)] = angle;
+void Servo::setLineDefault(md::noteline line, int16_t angle, ServoSide side, ServoFrom lastside){
+	defaultpos[static_cast<uint16_t>(side)][static_cast<uint16_t>(line)][static_cast<uint8_t>(lastside)] = angle;
 }
 
 void Servo::goLine(md::noteline line, ServoSide side){
-	setAngle(defaultpos[static_cast<uint16_t>(side)][static_cast<uint16_t>(line)], side);
+	if(line == md::noteline::MORELEFT || line == md::noteline::MORERIGHT){
+		setAngle(defaultpos[static_cast<uint16_t>(side)][static_cast<uint16_t>(line)][0], side);
+	} else if(static_cast<uint8_t>(line) > static_cast<uint8_t>(last[static_cast<uint8_t>(side)])){
+		setAngle(defaultpos[static_cast<uint16_t>(side)][static_cast<uint16_t>(line)][static_cast<uint8_t>(ServoFrom::LEFT)], side);
+	} else {
+		setAngle(defaultpos[static_cast<uint16_t>(side)][static_cast<uint16_t>(line)][static_cast<uint8_t>(ServoFrom::RIGHT)], side);
+	}
 }
 
 
