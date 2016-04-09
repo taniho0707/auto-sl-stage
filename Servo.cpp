@@ -59,7 +59,7 @@ Servo::Servo(){
 	TIM_CtrlPWMOutputs(TIM5, ENABLE);
 
 	for(auto i=0; i<2; ++i)
-		for(auto j=0; j<5; ++j)
+		for(auto j=0; j<7; ++j)
 			defaultpos[i][j] = 0;
 }
 

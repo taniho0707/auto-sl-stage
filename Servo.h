@@ -13,7 +13,7 @@ class Servo {
 private:
 	explicit Servo();
 
-	int16_t defaultpos[2][5];
+	int16_t defaultpos[2][7];
 
 public:
 	void enable(ServoSide);
