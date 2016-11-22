@@ -80,21 +80,21 @@ void initLCD(){
 
 	resetRS();
 	setE();
-	setLcdBits(0x3C);
+	setLcdBits(0x38);
 	Delay(1);
 	resetE();
 	Delay(1);
 	
 	resetRS();
 	setE();
-	setLcdBits(0x3C);
+	setLcdBits(0x38);
 	Delay(1);
 	resetE();
 	Delay(1);
 
 	resetRS();
 	setE();
-	setLcdBits(0x06);
+	setLcdBits(0x0F);
 	Delay(1);
 	resetE();
 	Delay(1);
@@ -108,7 +108,14 @@ void initLCD(){
 
 	resetRS();
 	setE();
-	setLcdBits(0x07);
+	setLcdBits(0x06);
+	Delay(1);
+	resetE();
+	Delay(1);
+
+	resetRS();
+	setE();
+	setLcdBits(0x80);
 	Delay(1);
 	resetE();
 	Delay(1);
@@ -123,7 +130,7 @@ void clearLcd(){
 
 	resetRS();
 	setE();
-	setLcdBits(0x02);
+	setLcdBits(0x06);
 	Delay(1);
 	resetE();
 	Delay(2);
@@ -141,7 +148,7 @@ void printChar(uint8_t c){
 int main(void){
 	SystemInit();
 	RCC_GetClocksFreq(&RCC_Clocks);
-	SysTick_Config(RCC_Clocks.HCLK_Frequency / 960);
+	SysTick_Config(RCC_Clocks.HCLK_Frequency / 1000);
 
 	GPIO_InitTypeDef GPIO_InitStructure;
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
@@ -163,12 +170,14 @@ int main(void){
 	Delay(500);
 	initLCD();
 	Delay(500);
-//	clearLcd();
+
+	// clearLcd();
 	printChar('H');
 	printChar('e');
 	printChar('l');
 	printChar('l');
 	printChar('o');
+	Delay(100);
 
 	GPIO_SetBits(GPIOB, GPIO_Pin_12);
 	Delay(50);
