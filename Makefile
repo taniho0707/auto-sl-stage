@@ -27,7 +27,7 @@ ASFLAGS = -x assembler-with-cpp -c $(TARGET_ARCH) $(COMPILE_OPTS)
 LDFLAGS = -Wl,-lgcc,-lc,-lm,-lrdimon,--gc-sections,-Map=bin/main.map,-cref -T stm32_flash.ld $(INCLUDE_DIRS) -lm -lstdc++ -L $(TOOLDIR)/../arm-none-eabi/lib/thumb -L $(SPLDIR)/Libraries -nostartfiles --specs=nano.specs --specs=rdimon.specs -u _printf_float $(TARGET_ARCH)
 
 .PHONY: all
-all: libstm32f401xx startup bin/main.bin
+all: libstm32f401xx startup bin/main.bin flash
 
 bin/main.bin: $(patsubst %.c,%.o,$(wildcard *.c)) $(patsubst %.cpp,%.o,$(wildcard *.cpp)) $(STARTUP_DIR)/startup_stm32f401xx.o $(SPLDIR)/Libraries/libstm32f401xx.a
 	$(LD) $(LDFLAGS) $(TARGET_ARCH) $^ -o bin/main.elf
@@ -53,10 +53,10 @@ clean:
 
 .PHONY: debug
 debug:
-	python write_main.py
+	python2 write_main.py
 	gtkterm
 
 .PHONY: flash
 flash:
-	python write_main.py
+	python2 write_main.py
 
