@@ -20,9 +20,9 @@ void resetRS(){
 }
 void setLcdBit(uint8_t pin){
 	if(pin == 0)
-		GPIO_SetBits(GPIOB, GPIO_Pin_6);
+		GPIO_SetBits(GPIOH, GPIO_Pin_0);
 	else if(pin == 1)
-		GPIO_SetBits(GPIOC, GPIO_Pin_7);
+		GPIO_SetBits(GPIOH, GPIO_Pin_1);
 	else if(pin == 2)
 		GPIO_SetBits(GPIOA, GPIO_Pin_7);
 	else if(pin == 3)
@@ -38,9 +38,9 @@ void setLcdBit(uint8_t pin){
 }
 void resetLcdBit(uint8_t pin){
 	if(pin == 0)
-		GPIO_ResetBits(GPIOB, GPIO_Pin_6);
+		GPIO_ResetBits(GPIOH, GPIO_Pin_0);
 	else if(pin == 1)
-		GPIO_ResetBits(GPIOC, GPIO_Pin_7);
+		GPIO_ResetBits(GPIOH, GPIO_Pin_1);
 	else if(pin == 2)
 		GPIO_ResetBits(GPIOA, GPIO_Pin_7);
 	else if(pin == 3)
@@ -67,16 +67,19 @@ void initLCD(){
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOH, ENABLE);
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_10;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_10;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;
-	GPIO_Init(GPIOC, &GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1;
+	GPIO_Init(GPIOH, &GPIO_InitStructure);
+	RCC_LSEConfig(RCC_LSE_OFF);
+	RCC_HSEConfig(RCC_HSE_OFF);
 
 	resetRS();
 	setE();
@@ -161,11 +164,10 @@ int main(void){
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13 | GPIO_Pin_14;
 	GPIO_Init(GPIOC, &GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;
-	GPIO_Init(GPIOB, &GPIO_InitStructure);
 
 	Delay(500);
 	initLCD();
@@ -177,6 +179,14 @@ int main(void){
 	printChar('l');
 	printChar('l');
 	printChar('o');
+	printChar(' ');
+	printChar('I');
+	printChar('M');
+	printChar('@');
+	printChar('S');
+	printChar(' ');
+	printChar('S');
+	printChar('S');
 	Delay(100);
 
 	GPIO_SetBits(GPIOB, GPIO_Pin_12);
@@ -193,6 +203,68 @@ int main(void){
 	Delay(20);
 
 //	ComPc* compc = ComPc::getInstance();
+
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;  
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
+	GPIO_SetBits(GPIOB, GPIO_Pin_1);
+
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3 | GPIO_Pin_2;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+	GPIO_ResetBits(GPIOA, GPIO_Pin_3);
+	GPIO_ResetBits(GPIOA, GPIO_Pin_2);
+
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+	GPIO_Init(GPIOC, &GPIO_InitStructure);
+	GPIO_SetBits(GPIOC, GPIO_Pin_15);
+	while(true);
+
+	
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+	TIM_TimeBaseInitTypeDef TIM_InitStructure;
+	TIM_InitStructure.TIM_Period = 336-1; // 250kHz
+	TIM_InitStructure.TIM_Prescaler = 0;
+	TIM_InitStructure.TIM_ClockDivision = 0;
+	TIM_InitStructure.TIM_CounterMode = TIM_CounterMode_Up;
+	TIM_InitStructure.TIM_RepetitionCounter = 0;
+	TIM_TimeBaseInit(TIM2, &TIM_InitStructure);
+
+	TIM_OCInitTypeDef TIM_OC_InitStructure;
+	TIM_OC_InitStructure.TIM_OCMode = TIM_OCMode_PWM1;
+	TIM_OC_InitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+	TIM_OC_InitStructure.TIM_OutputState = TIM_OutputState_Enable;
+	TIM_OC_InitStructure.TIM_Pulse = 100;
+	TIM_OC4Init(TIM2,&TIM_OC_InitStructure);
+	TIM_OC4PreloadConfig(TIM2,TIM_OCPreload_Enable);
+
+	GPIO_PinAFConfig(GPIOA, GPIO_PinSource3, GPIO_AF_TIM2);
+	TIM_TimeBaseInit(TIM2, &TIM_InitStructure);
+	TIM_ARRPreloadConfig(TIM2, ENABLE);
+	TIM_CtrlPWMOutputs(TIM2, ENABLE);
+
+	TIM_Cmd(TIM2, ENABLE);
+	while(true);
 
 	Servo* srv = Servo::getInstance();
 	srv->enable(ServoSide::LEFT);
