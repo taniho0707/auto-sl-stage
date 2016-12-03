@@ -24,6 +24,19 @@ int main(void){
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
 
+	/* PWR and BKP Periph clock enable */
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE);
+	/* GPIOC Periph clock enable */
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
+	PWR_BackupAccessCmd(ENABLE);
+ 	RCC_LSEConfig(RCC_LSE_OFF); // Disable LSE - PC14 PC15 as GPIO    
+ 
+	/* Configure PC14 and PC15 in output pushpull mode */
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14 | GPIO_Pin_15;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_Init(GPIOC, &GPIO_InitStructure);
+  
 	Timer::wait_ms(500);
 	Lcd* lcd = Lcd::getInstance();
 	Timer::wait_ms(500);
