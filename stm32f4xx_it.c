@@ -148,10 +148,7 @@ void PendSV_Handler(void)
   * @retval None
   */
 void SysTick_Handler(void){
-	TimingDelay_Decrement();
-
-	static Solenoid* solenoid = Solenoid::getInstance();
-	solenoid->interrupt();
+	Timer::interrupt();
 }
 
 
