@@ -4,6 +4,8 @@
 
 #include "Timer.h"
 
+#include "Solenoid.h"
+
 __IO int32_t Timer::total = 0;
 __IO int32_t Timer::waitnum = 0;
 
@@ -24,5 +26,7 @@ int32_t Timer::getTime(){
 
 void Timer::interrupt(){
 	wait_ms_decrement();
+	Solenoid* solenoid = Solenoid::getInstance();
+	solenoid->interrupt();
 	++ total;
 }
