@@ -6,7 +6,6 @@
 #include <stdarg.h>
 
 #include "Timer.h"
-/* #include "Servo.h" */
 #include "Motor.h"
 #include "Solenoid.h"
 

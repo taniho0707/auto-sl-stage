@@ -25,18 +25,19 @@ int main(void){
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
 
 	/* PWR and BKP Periph clock enable */
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE);
+	// RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB2Periph_BKP, ENABLE);
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR, ENABLE);
 	/* GPIOC Periph clock enable */
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
+	// RCC_APB2PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
 	PWR_BackupAccessCmd(ENABLE);
- 	RCC_LSEConfig(RCC_LSE_OFF); // Disable LSE - PC14 PC15 as GPIO    
- 
-	/* Configure PC14 and PC15 in output pushpull mode */
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14 | GPIO_Pin_15;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_Init(GPIOC, &GPIO_InitStructure);
-  
+	RCC_LSEConfig(RCC_LSE_OFF); // Disable LSE - PC14 PC15 as GPIO
+	RCC_HSEConfig(RCC_HSE_OFF);
+	// /* Configure PC14 and PC15 in output pushpull mode */
+	// GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14 | GPIO_Pin_15;
+	// GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
+	// GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+	// GPIO_Init(GPIOC, &GPIO_InitStructure);
+
 	Timer::wait_ms(500);
 	Lcd* lcd = Lcd::getInstance();
 	Timer::wait_ms(500);
@@ -69,76 +70,17 @@ int main(void){
 	GPIO_ResetBits(GPIOB, GPIO_Pin_12);
 	Timer::wait_ms(20);
 
-//	ComPc* compc = ComPc::getInstance();
+	ComPc* compc = ComPc::getInstance();
+	// compc->printf("Welcome to auto-sl-stage\n");
 
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;  
-	GPIO_Init(GPIOB, &GPIO_InitStructure);
-	GPIO_SetBits(GPIOB, GPIO_Pin_1);
-
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3 | GPIO_Pin_2;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
-	GPIO_Init(GPIOA, &GPIO_InitStructure);
-	GPIO_ResetBits(GPIOA, GPIO_Pin_3);
-	GPIO_ResetBits(GPIOA, GPIO_Pin_2);
-
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
-	GPIO_Init(GPIOC, &GPIO_InitStructure);
-	GPIO_SetBits(GPIOC, GPIO_Pin_15);
-	while(true);
-
-	
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-	GPIO_Init(GPIOA, &GPIO_InitStructure);
-
-	TIM_TimeBaseInitTypeDef TIM_InitStructure;
-	TIM_InitStructure.TIM_Period = 336-1; // 250kHz
-	TIM_InitStructure.TIM_Prescaler = 0;
-	TIM_InitStructure.TIM_ClockDivision = 0;
-	TIM_InitStructure.TIM_CounterMode = TIM_CounterMode_Up;
-	TIM_InitStructure.TIM_RepetitionCounter = 0;
-	TIM_TimeBaseInit(TIM2, &TIM_InitStructure);
-
-	TIM_OCInitTypeDef TIM_OC_InitStructure;
-	TIM_OC_InitStructure.TIM_OCMode = TIM_OCMode_PWM1;
-	TIM_OC_InitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
-	TIM_OC_InitStructure.TIM_OutputState = TIM_OutputState_Enable;
-	TIM_OC_InitStructure.TIM_Pulse = 100;
-	TIM_OC4Init(TIM2,&TIM_OC_InitStructure);
-	TIM_OC4PreloadConfig(TIM2,TIM_OCPreload_Enable);
-
-	GPIO_PinAFConfig(GPIOA, GPIO_PinSource3, GPIO_AF_TIM2);
-	TIM_TimeBaseInit(TIM2, &TIM_InitStructure);
-	TIM_ARRPreloadConfig(TIM2, ENABLE);
-	TIM_CtrlPWMOutputs(TIM2, ENABLE);
-
-	TIM_Cmd(TIM2, ENABLE);
-	while(true);
+	Motor* motor = Motor::getInstance();
+	motor->enable();
+	motor->setDuty(MotorSide::LEFT, 50);
+	motor->setDuty(MotorSide::RIGHT, 50);
 
 	Solenoid* solenoid = Solenoid::getInstance();
 	solenoid->tap(SolenoidSide::LEFT);
 	solenoid->tap(SolenoidSide::RIGHT);
-
-	int16_t a = 0;
-	int16_t b = 0;
 
 	while (1){
 		
