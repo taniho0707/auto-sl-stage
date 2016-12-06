@@ -5,3 +5,4 @@ bin/*
 TAGS
 *.pyc
 stm32writer/*.pyc
+*.score
