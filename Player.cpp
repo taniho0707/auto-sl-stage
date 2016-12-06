@@ -1,13 +1,14 @@
 #include "Player.h"
 
+using namespace md;
 
 Player::Player(){
-	servo = Servo::getInstance();
 	solenoid = Solenoid::getInstance();
+	motor = Motor::getInstance();
 }
 
-void Player::initialize(md::MusicData& d){
-	data = d;
+void Player::initialize(Score& d){
+	score = d;
 }
 
 void Player::start(){

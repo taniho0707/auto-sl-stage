@@ -2,20 +2,20 @@
 
 #include "MusicData.h"
 #include "ComPc.h"
-#include "Servo.h"
 #include "Solenoid.h"
-
+#include "Motor.h"
+#include "MusicData.h"
 
 class Player{
 private:
-	Servo* servo;
 	Solenoid* solenoid;
-	md::MusicData data;
+	Motor* motor;
+	md::Score score;
 
 	Player();
 
 public:
-	void initialize(md::MusicData&);
+	void initialize(md::Score&);
 	void start();
 };
 
